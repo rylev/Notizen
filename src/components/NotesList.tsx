@@ -9,7 +9,7 @@ interface NotesListProps {
 }
 
 class NoteItem implements VirtualListViewItemInfo {
-    height = 20
+    height = 32
     template = 'foo'
     key: string
     readonly note: Note
@@ -51,8 +51,12 @@ class NotesList extends RX.Component<NotesListProps, null> {
         const itemList = this.props.notes.map((note, i) => {
             return new NoteItem(i.toString(), note)
         })
+        const viewStyle = RX.Styles.createViewStyle({
+            flex: 1
+        })
+
         return (
-            <RX.View>
+            <RX.View id={ "NoteList" } style={ viewStyle }>
                 <VirtualListView
                     itemList={itemList}
                     renderItem={this._renderItem}
@@ -73,9 +77,8 @@ class NotesList extends RX.Component<NotesListProps, null> {
             alignItems: 'center'
         }, false);
 
-        console.log(item.note.text)
         return (
-            <RX.View style={ viewStyle }>
+            <RX.View id={ "NoteItem" } style={ viewStyle }>
                 <RX.Text>
                     { item.note.text }
                 </RX.Text>
