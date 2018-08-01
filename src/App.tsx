@@ -76,7 +76,7 @@ class App extends RX.Component<{}, AppState> {
 
     private _onPressCreateNote = () => {
         console.log(this.state)
-        this.setState({notes: this.state.notes.concat(new Note("Ryan"))})
+        this.setState({notes: this.state.notes.concat(new Note("Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think?"))})
     }
 
     private _onPressBack = () => {
