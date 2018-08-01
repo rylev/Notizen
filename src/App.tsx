@@ -10,12 +10,13 @@ import NoteDetail from './components/NoteDetail'
 import Note from './models/Note'
 
 enum NavigationRouteId {
-    MainPanel,
-    SecondPanel
+    NotesList,
+    NoteDetail
 }
 
 type AppState = {
     notes: Note[]
+    currentNote?: Note
 }
 
 const styles = {
@@ -35,7 +36,7 @@ class App extends RX.Component<{}, AppState> {
 
     componentDidMount() {
         this._navigator.immediatelyResetRouteStack([{
-            routeId: NavigationRouteId.MainPanel,
+            routeId: NavigationRouteId.NotesList,
             sceneConfigType: Types.NavigatorSceneConfigType.Fade
         }]);
     }
@@ -57,29 +58,31 @@ class App extends RX.Component<{}, AppState> {
 
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
         switch (navigatorRoute.routeId) {
-            case NavigationRouteId.MainPanel:
+            case NavigationRouteId.NotesList:
                 return <NotesList notes={this.state.notes} onPressCreateNote={ this._onPressCreateNote} onPressNavigate={ this._onPressNavigate } />;
 
-            case NavigationRouteId.SecondPanel:
-                return <NoteDetail onNavigateBack={ this._onPressBack } />;
+            case NavigationRouteId.NoteDetail:
+                return <NoteDetail note={this.state.currentNote!!} onNavigateBack={ this._onPressBack } />;
         }
 
         return null;
     }
 
-    private _onPressNavigate = () => {
-        this._navigator.push({
-            routeId: NavigationRouteId.SecondPanel,
-            sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
-        });
+    private _onPressNavigate = (note: Note) => {
+        this.setState({currentNote: note}, () => {
+            this._navigator.push({
+                routeId: NavigationRouteId.NoteDetail,
+                sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
+            });
+        })
     }
 
     private _onPressCreateNote = () => {
-        console.log(this.state)
-        this.setState({notes: this.state.notes.concat(new Note("Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think? Ryan is such a great guy, don't you think?"))})
+        this.setState({notes: this.state.notes.concat(new Note(Math.random().toString(36).substring(7)))})
     }
 
     private _onPressBack = () => {
+        this.setState({currentNote: undefined})
         this._navigator.pop();
     }
 }

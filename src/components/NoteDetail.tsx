@@ -1,6 +1,9 @@
 import RX = require('reactxp')
 
+import Note from '../models/Note'
+
 type NoteDetailProps = {
+    note: Note,
     onNavigateBack: () => void
 }
 type NoteDetailState  = {}
@@ -10,8 +13,11 @@ const styles = {
         flex: 1,
         backgroundColor: '#fff',
         padding: 16,
-        justifyContent: 'center',
-        alignItems: 'center'
+    }),
+    header: RX.Styles.createViewStyle({
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+
     }),
     roundButton: RX.Styles.createViewStyle({
         margin: 16,
@@ -42,14 +48,18 @@ class NoteDetail extends RX.Component<NoteDetailProps, NoteDetailState> {
     render() {
         return (
             <RX.View style={styles.container} useSafeInsets={true}>
-                <RX.Text style={styles.text}>
-                    Hello world
-                </RX.Text>
-                <RX.Button style={styles.roundButton} onPress={this._onPressBack}>
-                    <RX.Text style={styles.buttonText}>
-                        Go Back
+                <RX.View id={"header"} style={styles.header} >
+                    <RX.Button style={styles.roundButton} onPress={this._onPressBack}>
+                        <RX.Text style={styles.buttonText}>
+                            Go Back
+                        </RX.Text>
+                    </RX.Button>
+                </RX.View>
+                <RX.View style={styles.container} >
+                    <RX.Text style={styles.text}>
+                        {this.props.note.text}
                     </RX.Text>
-                </RX.Button>
+                </RX.View>
             </RX.View>
         )
     }

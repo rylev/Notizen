@@ -1,11 +1,10 @@
 import RX = require('reactxp')
 import { VirtualListView, VirtualListViewItemInfo } from 'reactxp-virtuallistview'
 import Note from '../models/Note'
-import { start } from 'repl';
 
 interface NotesListProps {
     notes: Note[],
-    onPressNavigate: () => void
+    onPressNavigate: (note: Note) => void
     onPressCreateNote: () => void
 }
 
@@ -60,12 +59,13 @@ class NotesList extends RX.Component<NotesListProps, null> {
             width: 60,
             height: 60,
             borderRadius: 30,
-            marginLeft: 12,
+            marginRight: 12,
             marginTop: -80,
             marginBottom: 8,
             backgroundColor: '#eef7ff',
             justifyContent: 'center',
             alignItems: 'center',
+            alignSelf: 'flex-end',
             shadowColor: '#ccc',
             shadowRadius: 4
         })
@@ -94,6 +94,7 @@ class NotesList extends RX.Component<NotesListProps, null> {
 
     private _renderItem = (item: NoteItem, hasFocus?: boolean) => {
         const viewStyle = RX.Styles.createViewStyle({
+            minHeight: 20,
             backgroundColor: '#eef9ec',
             borderColor: '#99d694',
             borderWidth: 1,
@@ -108,21 +109,14 @@ class NotesList extends RX.Component<NotesListProps, null> {
         }, false);
 
         return (
-            <RX.View id={ "NoteItem" } style={ viewStyle }>
+            <RX.View id={ "NoteItem" } onPress={ _ => this.props.onPressNavigate(item.note) } style={ viewStyle }>
                 <RX.Text>
                     { item.note.text }
                 </RX.Text>
             </RX.View>
         );
     }
-
-    private _onNewNote = () => {
-        this.props.onPressCreateNote()
-    }
     
-    private _onPressNavigate = () => {
-        this.props.onPressNavigate()
-    }
 }
 
 export default NotesList
