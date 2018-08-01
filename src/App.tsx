@@ -72,7 +72,7 @@ class App extends RX.Component<{}, AppState> {
         this.setState({currentNote: note}, () => {
             this._navigator.push({
                 routeId: NavigationRouteId.NoteDetail,
-                sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
+                sceneConfigType: Types.NavigatorSceneConfigType.FloatFromBottom
             });
         })
     }

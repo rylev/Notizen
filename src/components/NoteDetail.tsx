@@ -11,13 +11,10 @@ type NoteDetailState  = {}
 const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
-        backgroundColor: '#fff',
-        padding: 16,
     }),
     header: RX.Styles.createViewStyle({
         flexDirection: 'row',
         justifyContent: 'flex-start'
-
     }),
     roundButton: RX.Styles.createViewStyle({
         margin: 16,
@@ -25,10 +22,14 @@ const styles = {
         backgroundColor: '#7d88a9'
     }),
     text: RX.Styles.createTextStyle({
-        fontSize: 48,
+        fontSize: 24,
         marginVertical: 6,
         marginHorizontal: 12,
         color: 'black'
+    }),
+    noteBody: RX.Styles.createViewStyle({
+        backgroundColor: '#eef9ec',
+        flex: 1,
     }),
     buttonText: RX.Styles.createTextStyle({
         fontSize: 16,
@@ -55,7 +56,7 @@ class NoteDetail extends RX.Component<NoteDetailProps, NoteDetailState> {
                         </RX.Text>
                     </RX.Button>
                 </RX.View>
-                <RX.View style={styles.container} >
+                <RX.View style={styles.noteBody} >
                     <RX.Text style={styles.text}>
                         {this.props.note.text}
                     </RX.Text>
