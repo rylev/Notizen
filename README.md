@@ -1,4 +1,6 @@
-# RXPHelloWorld
+# Notizen
+
+Note taking application for learning React XP.
 
 This app works on React Native (iOS, Android) and web. Most of the app's code is contained in `App.tsx`.
 
