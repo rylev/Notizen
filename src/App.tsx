@@ -14,6 +14,10 @@ enum NavigationRouteId {
     SecondPanel
 }
 
+type AppState = {
+    notes: Note[]
+}
+
 const styles = {
     // Standard navigator style should be an object. So we have to disable caching here.
     navCardStyle: RX.Styles.createViewStyle({
@@ -21,12 +25,12 @@ const styles = {
     }, false)
 };
 
-class App extends RX.Component<{}, null> {
+class App extends RX.Component<{}, AppState> {
     private _navigator: Navigator;
-    private _notes: Note[] = []
 
     constructor(props: {}) {
         super(props);
+        this.state = {notes: []}
     }
 
     componentDidMount() {
@@ -54,7 +58,7 @@ class App extends RX.Component<{}, null> {
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
         switch (navigatorRoute.routeId) {
             case NavigationRouteId.MainPanel:
-                return <NotesList notes={this._notes} onPressNavigate={ this._onPressNavigate } />;
+                return <NotesList notes={this.state.notes} onPressCreateNote={ this._onPressCreateNote} onPressNavigate={ this._onPressNavigate } />;
 
             case NavigationRouteId.SecondPanel:
                 return <NoteDetail onNavigateBack={ this._onPressBack } />;
@@ -68,6 +72,11 @@ class App extends RX.Component<{}, null> {
             routeId: NavigationRouteId.SecondPanel,
             sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
         });
+    }
+
+    private _onPressCreateNote = () => {
+        console.log(this.state)
+        this.setState({notes: this.state.notes.concat(new Note("Ryan"))})
     }
 
     private _onPressBack = () => {

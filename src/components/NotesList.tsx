@@ -5,6 +5,7 @@ import Note from '../models/Note'
 interface NotesListProps {
     notes: Note[],
     onPressNavigate: () => void
+    onPressCreateNote: () => void
 }
 
 class NoteItem implements VirtualListViewItemInfo {
@@ -50,14 +51,18 @@ class NotesList extends RX.Component<NotesListProps, null> {
         const itemList = this.props.notes.map((note, i) => {
             return new NoteItem(i.toString(), note)
         })
-        console.log(itemList)
         return (
-            <VirtualListView
-                itemList={itemList}
-                renderItem={this._renderItem}
-                animateChanges={true}
-                skipRenderIfItemUnchanged={true}
-            />
+            <RX.View>
+                <VirtualListView
+                    itemList={itemList}
+                    renderItem={this._renderItem}
+                    animateChanges={true}
+                    skipRenderIfItemUnchanged={true}
+                />
+                <RX.Button onPress={this.props.onPressCreateNote} >
+                    +
+                </RX.Button>
+            </RX.View>
         )
     }
 
@@ -68,6 +73,7 @@ class NotesList extends RX.Component<NotesListProps, null> {
             alignItems: 'center'
         }, false);
 
+        console.log(item.note.text)
         return (
             <RX.View style={ viewStyle }>
                 <RX.Text>
@@ -75,6 +81,10 @@ class NotesList extends RX.Component<NotesListProps, null> {
                 </RX.Text>
             </RX.View>
         );
+    }
+
+    private _onNewNote = () => {
+        this.props.onPressCreateNote()
     }
     
     private _onPressNavigate = () => {
