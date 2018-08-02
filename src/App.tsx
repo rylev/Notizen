@@ -15,8 +15,8 @@ enum NavigationRouteId {
 }
 
 type AppState = {
-    notes: Note[]
-    currentNote?: Note
+    notes: {[key: string]: Note}
+    currentNoteId: string | undefined
 }
 
 const styles = {
@@ -31,7 +31,7 @@ class App extends RX.Component<{}, AppState> {
 
     constructor(props: {}) {
         super(props);
-        this.state = {notes: []}
+        this.state = {notes: {}, currentNoteId: undefined}
     }
 
     componentDidMount() {
@@ -59,17 +59,20 @@ class App extends RX.Component<{}, AppState> {
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
         switch (navigatorRoute.routeId) {
             case NavigationRouteId.NotesList:
-                return <NotesList notes={this.state.notes} onPressCreateNote={ this._onPressCreateNote} onPressNavigate={ this._onPressNavigate } />;
+                return <NotesList notes={ notes(this.state.notes) } onPressCreateNote={ this._onPressCreateNote} onPressNavigate={ this._onPressNavigate } />;
 
             case NavigationRouteId.NoteDetail:
-                return <NoteDetail note={this.state.currentNote!!} onNavigateBack={ this._onPressBack } />;
+                return <NoteDetail 
+                note={this.state.notes[this.state.currentNoteId]}
+                onNavigateBack={ this._onPressBack }
+                onUpdateNote={ this._onUpdateNote }/>;
         }
 
         return null;
     }
 
     private _onPressNavigate = (note: Note) => {
-        this.setState({currentNote: note}, () => {
+        this.setState({currentNoteId: note.id}, () => {
             this._navigator.push({
                 routeId: NavigationRouteId.NoteDetail,
                 sceneConfigType: Types.NavigatorSceneConfigType.FloatFromBottom
@@ -78,13 +81,33 @@ class App extends RX.Component<{}, AppState> {
     }
 
     private _onPressCreateNote = () => {
-        this.setState({notes: this.state.notes.concat(new Note(Math.random().toString(36).substring(7)))})
+        const newNote = new Note("Nothing")
+        this.state.notes[newNote.id] = newNote
+        this.setState(this.state)
     }
 
     private _onPressBack = () => {
-        this.setState({currentNote: undefined})
-        this._navigator.pop();
+        this.setState({currentNoteId: undefined})
+        this._navigator.pop()
     }
+
+    private _onUpdateNote = (text: string) => {
+        const currentNote = this.state.notes[this.state.currentNoteId]
+        if (currentNote) {
+            const updatedNote = currentNote.setText(text)
+            this.state.notes[this.state.currentNoteId] = updatedNote
+            this.setState(this.state)
+        }
+    }
+}
+
+function notes(noteIdToNotes: {[key: string]: Note}): Array<Note> {
+    const result = []
+    for (let noteId of Object.keys(noteIdToNotes)) {
+        const note = noteIdToNotes[noteId]
+        result.push(note)
+    }
+    return result
 }
 
 export = App;

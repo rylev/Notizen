@@ -5,6 +5,7 @@ import Note from '../models/Note'
 type NoteDetailProps = {
     note: Note,
     onNavigateBack: () => void
+    onUpdateNote: (text: string) => void
 }
 type NoteDetailState  = {}
 
@@ -53,7 +54,8 @@ const styles = {
         fontSize: 24,
         marginVertical: 6,
         marginHorizontal: 12,
-        color: 'black'
+        color: 'black',
+        backgroundColor: '#eef9ec'
     }),
     timeBar: RX.Styles.createViewStyle({
         backgroundColor: '#eef9ec',
@@ -92,9 +94,8 @@ class NoteDetail extends RX.Component<NoteDetailProps, NoteDetailState> {
                     </RX.Button>
                 </RX.View>
                 <RX.View style={styles.noteBody} >
-                    <RX.Text style={styles.text}>
-                        {this.props.note.text}
-                    </RX.Text>
+                    <RX.TextInput multiline={true} style={styles.text} value={this.props.note.text} onChangeText={this._onChangeText}>
+                    </RX.TextInput>
                 </RX.View>
                 <RX.View style={styles.timeBar} >
                     <RX.Text style={styles.timeBarText}>
@@ -109,6 +110,9 @@ class NoteDetail extends RX.Component<NoteDetailProps, NoteDetailState> {
         this.props.onNavigateBack()
     }
 
+    private _onChangeText = (newValue: string) => {
+        this.props.onUpdateNote(newValue)
+    }
 }
 
 export default NoteDetail
