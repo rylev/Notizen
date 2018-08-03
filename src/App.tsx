@@ -82,7 +82,8 @@ class App extends RX.Component<{}, AppState> {
 
     private _onPressCreateNote = () => {
         const newNote = new Note("Nothing")
-        const newState = Object.assign({}, this.state, {[newNote.id]: newNote})
+        const newNotes = Object.assign({}, this.state.notes, {[newNote.id]: newNote})
+        const newState = Object.assign({}, this.state, {notes: newNotes})
         this.setState(newState)
     }
 
