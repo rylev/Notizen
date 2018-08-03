@@ -82,8 +82,8 @@ class App extends RX.Component<{}, AppState> {
 
     private _onPressCreateNote = () => {
         const newNote = new Note("Nothing")
-        this.state.notes[newNote.id] = newNote
-        this.setState(this.state)
+        const newState = Object.assign({}, this.state, {[newNote.id]: newNote})
+        this.setState(newState)
     }
 
     private _onPressBack = () => {
@@ -95,8 +95,8 @@ class App extends RX.Component<{}, AppState> {
         const currentNote = this.state.notes[this.state.currentNoteId]
         if (currentNote) {
             const updatedNote = currentNote.setText(text)
-            this.state.notes[this.state.currentNoteId] = updatedNote
-            this.setState(this.state)
+            const newState = Object.assign({}, this.state, {[updatedNote.id]: updatedNote})
+            this.setState(newState)
         }
     }
 }
