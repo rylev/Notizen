@@ -20,67 +20,41 @@ class NoteItem implements VirtualListViewItemInfo {
     }
 }
 
+const listStyle = RX.Styles.createViewStyle({
+    backgroundColor: '#fff',
+    flex: 1
+})
+const buttonStyle = RX.Styles.createButtonStyle({
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 12,
+    marginTop: -80,
+    marginBottom: 8,
+    backgroundColor: '#eef7ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    shadowColor: '#ccc',
+    shadowRadius: 4
+})
+const buttonTextStyle = RX.Styles.createTextStyle({
+    color: '#0078d7',
+    fontSize: 24
+})
+
 class NotesList extends RX.Component<NotesListProps, null> {
-    private _translationValue: RX.Animated.Value
-    private _animatedStyle: RX.Types.AnimatedTextStyleRuleSet
-
-    constructor(props: NotesListProps) {
-        super(props)
-
-        this._translationValue = RX.Animated.createValue(-100)
-        this._animatedStyle = RX.Styles.createAnimatedTextStyle({
-            transform: [
-                {
-                    translateY: this._translationValue
-                }
-            ]
-        })
-    }
-
-    componentDidMount() {
-        const animation = RX.Animated.timing(this._translationValue, {
-              toValue: 0,
-              easing: RX.Animated.Easing.OutBack(),
-              duration: 500
-            }
-        )
-
-        animation.start()
-    }
-
     render() {
         const itemList = this.props.notes.map((note, i) => {
             return new NoteItem(i.toString(), note)
         })
-        const listStyle = RX.Styles.createViewStyle({
-            flex: 1
-        })
-        const buttonStyle = RX.Styles.createButtonStyle({
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            marginRight: 12,
-            marginTop: -80,
-            marginBottom: 8,
-            backgroundColor: '#eef7ff',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'flex-end',
-            shadowColor: '#ccc',
-            shadowRadius: 4
-        })
-        const buttonTextStyle = RX.Styles.createTextStyle({
-            color: '#0078d7',
-            fontSize: 24
-        })
-
         return (
             <RX.View id={ "NoteList" } style={ listStyle }>
                 <VirtualListView
                     itemList={itemList}
                     renderItem={this._renderItem}
                     animateChanges={true}
-                    skipRenderIfItemUnchanged={true}
+                    skipRenderIfItemUnchanged={false}
                 >
                 </VirtualListView>
                 <RX.Button 
