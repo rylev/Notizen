@@ -96,7 +96,8 @@ class App extends RX.Component<{}, AppState> {
         const currentNote = this.state.notes[this.state.currentNoteId]
         if (currentNote) {
             const updatedNote = currentNote.setText(text)
-            const newState = Object.assign({}, this.state, {[updatedNote.id]: updatedNote})
+            const newNotes = Object.assign({}, this.state.notes, { [updatedNote.id]: updatedNote })
+            const newState = Object.assign({}, this.state, { notes: newNotes })
             this.setState(newState)
         }
     }
