@@ -51,6 +51,7 @@ const styles = {
         flex: 1,
     }),
     text: RX.Styles.createTextStyle({
+        flex: 1,
         fontSize: 24,
         marginVertical: 6,
         marginHorizontal: 12,
@@ -78,30 +79,48 @@ class NoteDetail extends RX.Component<NoteDetailProps, NoteDetailState> {
         this.state = {}
     }
 
-    render() {
+    header(): JSX.Element {
+        return (
+            <RX.View id={"header"} style={styles.header} >
+                <RX.Button style={styles.backButton} onPress={this._onPressBack}>
+                    <RX.Text style={styles.backButtonText}>
+                        ∨
+                    </RX.Text>
+                </RX.Button>
+                <RX.Button style={styles.overflowButton}>
+                    <RX.Text style={styles.overflowButtonText}>
+                        ...
+                    </RX.Text>
+                </RX.Button>
+            </RX.View>
+        )
+    }
+
+    footer(): JSX.Element {
+        return (
+            <RX.View style={styles.timeBar} >
+                <RX.Text style={styles.timeBarText}>
+                    11.April 2018 12:10 AM
+                </RX.Text>
+            </RX.View>
+        )
+    }
+
+    noteBody(): JSX.Element {
+        return (
+            <RX.View style={styles.noteBody} >
+                <RX.TextInput multiline={true} style={styles.text} value={this.props.note.text} onChangeText={this._onChangeText}>
+                </RX.TextInput>
+            </RX.View>
+        )
+    }
+
+    render(): JSX.Element {
         return (
             <RX.View style={styles.container} useSafeInsets={true}>
-                <RX.View id={"header"} style={styles.header} >
-                    <RX.Button style={styles.backButton} onPress={this._onPressBack}>
-                        <RX.Text style={styles.backButtonText}>
-                            ∨
-                        </RX.Text>
-                    </RX.Button>
-                    <RX.Button style={styles.overflowButton}>
-                        <RX.Text style={styles.overflowButtonText}>
-                            ...
-                        </RX.Text>
-                    </RX.Button>
-                </RX.View>
-                <RX.View style={styles.noteBody} >
-                    <RX.TextInput multiline={true} style={styles.text} value={this.props.note.text} onChangeText={this._onChangeText}>
-                    </RX.TextInput>
-                </RX.View>
-                <RX.View style={styles.timeBar} >
-                    <RX.Text style={styles.timeBarText}>
-                        11.April 2018 12:10 AM
-                    </RX.Text>
-                </RX.View>
+                {this.header()}
+                {this.noteBody()}
+                {this.footer()}
             </RX.View>
         )
     }
