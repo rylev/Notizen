@@ -25,11 +25,9 @@ class App extends RX.Component<{}> {
 
     constructor(props: {}) {
         super(props);
-        console.log("App.constructor()")
     }
 
     componentDidMount() {
-        console.log("App.render()")
         this._navigator.immediatelyResetRouteStack([{
             routeId: NavigationRouteId.NotesList,
             sceneConfigType: Types.NavigatorSceneConfigType.Fade
@@ -37,7 +35,6 @@ class App extends RX.Component<{}> {
     }
 
     render() {
-        console.log("App.render()")
         return (
             <Navigator
                 ref={ this._onNavigatorRef }
@@ -53,7 +50,6 @@ class App extends RX.Component<{}> {
     }
 
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
-        console.log("App._renderScene()")
         return (
             <AppContainer
                 navigatorRoute={ navigatorRoute }
