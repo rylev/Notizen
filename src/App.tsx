@@ -5,17 +5,12 @@
 import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
 import RX = require('reactxp');
 
-import NotesList from './components/NotesList'
-import NoteDetail from './components/NoteDetail'
+import AppContainer from './components/AppContainer'
 import Note from './models/Note'
 
 enum NavigationRouteId {
-    MainPanel,
-    SecondPanel
-}
-
-type AppState = {
-    notes: Note[]
+    NotesList,
+    NoteDetail
 }
 
 const styles = {
@@ -25,17 +20,16 @@ const styles = {
     }, false)
 };
 
-class App extends RX.Component<{}, AppState> {
+class App extends RX.Component<{}> {
     private _navigator: Navigator;
 
     constructor(props: {}) {
         super(props);
-        this.state = {notes: []}
     }
 
     componentDidMount() {
         this._navigator.immediatelyResetRouteStack([{
-            routeId: NavigationRouteId.MainPanel,
+            routeId: NavigationRouteId.NotesList,
             sceneConfigType: Types.NavigatorSceneConfigType.Fade
         }]);
     }
@@ -56,31 +50,27 @@ class App extends RX.Component<{}, AppState> {
     }
 
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
-        switch (navigatorRoute.routeId) {
-            case NavigationRouteId.MainPanel:
-                return <NotesList notes={this.state.notes} onPressCreateNote={ this._onPressCreateNote} onPressNavigate={ this._onPressNavigate } />;
-
-            case NavigationRouteId.SecondPanel:
-                return <NoteDetail onNavigateBack={ this._onPressBack } />;
-        }
-
-        return null;
+        return (
+            <AppContainer
+                navigatorRoute={ navigatorRoute }
+                onPressNavigate={ this._onPressNavigate }
+                onPressBack={ this._onPressBack }
+            />
+        )
     }
 
-    private _onPressNavigate = () => {
-        this._navigator.push({
-            routeId: NavigationRouteId.SecondPanel,
-            sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
-        });
-    }
-
-    private _onPressCreateNote = () => {
-        console.log(this.state)
-        this.setState({notes: this.state.notes.concat(new Note("Ryan"))})
+    private _onPressNavigate = (note: Note) => {
+        this.setState({currentNoteId: note.id}, () => {
+            this._navigator.push({
+                routeId: NavigationRouteId.NoteDetail,
+                sceneConfigType: Types.NavigatorSceneConfigType.FloatFromBottom
+            });
+        })
     }
 
     private _onPressBack = () => {
-        this._navigator.pop();
+        this.setState({currentNoteId: undefined})
+        this._navigator.pop()
     }
 }
 
